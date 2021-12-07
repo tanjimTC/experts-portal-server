@@ -13,9 +13,9 @@ router.post("/stripe/charge", async (req, res) => {
     source: req.body.tokenID,
   });
   console.log(charge);
-  // if (!charge.paid) {
-  //   return res.status(400).json({ error: "Payment was not finalized!" });
-  // }
+  if (!charge.paid) {
+    return res.status(400).json({ error: "Payment was not finalized!" });
+  }
 
   res.send(charge);
 });
