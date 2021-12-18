@@ -1,5 +1,6 @@
 let Validator = require("validatorjs");
 const Appointment = require("../../models/Appointment");
+const PhysicalAppointment = require("../../models/PhysicalAppointment");
 
 let appointmentController = {
   getAppointmentsByemail: async (req, res) => {
@@ -19,11 +20,60 @@ let appointmentController = {
     }
   },
 
+  getAppointmentsByClientEmail: async (req, res) => {
+    try {
+      const { userEmail } = req.params;
+      console.log("userEmail", userEmail);
+      const Appointments = await Appointment.find({ userEmail });
+      console.log("Appointments", Appointments);
+      return apiResponse.success(
+        res,
+        { data: Appointments },
+        200,
+        "Appointments by Email found"
+      );
+    } catch (error) {
+      res.json(error);
+    }
+  },
+
+  getRequstedAppointmentsByemail: async (req, res) => {
+    try {
+      const { expertEmail } = req.params;
+      console.log("expertEmail", expertEmail);
+      const Appointments = await PhysicalAppointment.find({ expertEmail });
+      console.log("Appointments", Appointments);
+      return apiResponse.success(
+        res,
+        { data: Appointments },
+        200,
+        "Appointments by Email found"
+      );
+    } catch (error) {
+      res.json(error);
+    }
+  },
+
   getAppointmentsByDate: async (req, res) => {
     try {
       const { date, email } = req.body;
       console.log("date", date);
       const Appointments = await Appointment.find({ date, expertEmail: email });
+      return apiResponse.success(
+        res,
+        { data: Appointments },
+        200,
+        "Appointments by date found"
+      );
+    } catch (error) {
+      res.json(error);
+    }
+  },
+
+  getAppointmentsByDateClient: async (req, res) => {
+    try {
+      const { date, email } = req.body;
+      const Appointments = await Appointment.find({ date, userEmail: email });
       return apiResponse.success(
         res,
         { data: Appointments },
@@ -98,6 +148,68 @@ let appointmentController = {
         },
         201,
         "Appointment added successfully!"
+      );
+    } catch (error) {
+      console.log("got here inside error");
+      return apiResponse.error(res, { error });
+    }
+  },
+
+  reqAppointment: async (req, res) => {
+    try {
+      let rules = {
+        userName: "string",
+        userEmail: "string",
+        userPhone: "string",
+        expertId: "string",
+        expertName: "string",
+        expertEmail: "string",
+        rate: "string",
+        date: "string",
+      };
+
+      let validation = new Validator(req.body, rules);
+      if (validation.fails()) {
+        return apiResponse.error(
+          res,
+          { error: validation.errors.all() },
+          401,
+          "Validation failed!"
+        );
+      }
+
+      let {
+        userName,
+        userEmail,
+        userPhone,
+        expertName,
+        expertId,
+        expertEmail,
+        rate,
+        date,
+      } = req.body;
+
+      const newAppointment = new PhysicalAppointment({
+        userName,
+        userEmail,
+        userPhone,
+        expertId,
+        expertName,
+        expertEmail,
+        rate,
+        date,
+        approved: false,
+      });
+
+      let appointment = await newAppointment.save();
+
+      return apiResponse.success(
+        res,
+        {
+          data: appointment,
+        },
+        201,
+        "Appointment requsted successfully!"
       );
     } catch (error) {
       console.log("got here inside error");
