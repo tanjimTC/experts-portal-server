@@ -65,73 +65,72 @@ let expertController = {
   },
 
   signup: async (req, res) => {
-    try {
-      let rules = {
-        userImage: "required",
-        name: "required",
-        email: "required|email",
-        about: "required",
-        category: "required|string",
-        rate: "required|string",
-        password: "required|min:6",
-      };
-      console.log("req.body", req.query);
+    // try {
+    let rules = {
+      userImage: "required",
+      name: "required",
+      email: "required|email",
+      about: "required",
+      category: "required|string",
+      rate: "required|string",
+      password: "required|min:6",
+    };
+    console.log("req.body", req.query);
 
-      let validation = new Validator(req.body, rules);
-      if (validation.fails()) {
-        return apiResponse.error(
-          res,
-          { error: validation.errors.all() },
-          401,
-          "Validation failed!"
-        );
-      }
-
-      let { userImage, name, email, about, category, rate, password } =
-        req.body;
-
-      password = await bcrypt.hash(password, 10);
-      const newExpert = new Expert({
-        userImage,
-        name,
-        email,
-        about,
-        category,
-        rate,
-        password,
-      });
-
-      let expert = await newExpert.save();
-
-      // jwt signing
-      let token = jwt.sign(
-        {
-          id: expert._id,
-        },
-        process.env.JWT_SECRET,
-        { expiresIn: 60 * 60 * 24 }
-      );
-
-      return apiResponse.success(
+    let validation = new Validator(req.body, rules);
+    if (validation.fails()) {
+      return apiResponse.error(
         res,
-        {
-          data: {
-            userImage: expert.userImage,
-            name: expert.name,
-            email: expert.email,
-            about: expert.about,
-            category: expert.category,
-            rate: expert.rate,
-            token,
-          },
-        },
-        201,
-        "User registered successfully!"
+        { error: validation.errors.all() },
+        401,
+        "Validation failed!"
       );
-    } catch (error) {
-      console.log("got here inside error");
-      return apiResponse.error(res, { error });
     }
+
+    let { userImage, name, email, about, category, rate, password } = req.body;
+
+    password = await bcrypt.hash(password, 10);
+    const newExpert = new Expert({
+      userImage,
+      name,
+      email,
+      about,
+      category,
+      rate,
+      password,
+    });
+
+    let expert = await newExpert.save();
+
+    // jwt signing
+    let token = jwt.sign(
+      {
+        id: expert._id,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: 60 * 60 * 24 }
+    );
+
+    return apiResponse.success(
+      res,
+      {
+        data: {
+          userImage: expert.userImage,
+          name: expert.name,
+          email: expert.email,
+          about: expert.about,
+          category: expert.category,
+          rate: expert.rate,
+          token,
+        },
+      },
+      201,
+      "User registered successfully!"
+    );
+    // } catch (error) {
+    //   console.log("got here inside error");
+    //   return apiResponse.error(res, { error });
+    // }
   },
 
   login: async (req, res) => {

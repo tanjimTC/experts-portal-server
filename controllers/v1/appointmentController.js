@@ -198,7 +198,7 @@ let appointmentController = {
         expertEmail,
         rate,
         date,
-        approved: false,
+        status: false,
       });
 
       let appointment = await newAppointment.save();
@@ -211,6 +211,43 @@ let appointmentController = {
         201,
         "Appointment requsted successfully!"
       );
+    } catch (error) {
+      console.log("got here inside error");
+      return apiResponse.error(res, { error });
+    }
+  },
+
+  updateAppointment: async (req, res) => {
+    try {
+      let { id, status } = req.body;
+
+      if (status) {
+        const appointment = await PhysicalAppointment.findOneAndUpdate(
+          { _id: id },
+          { status: status },
+          { new: true }
+        );
+
+        console.log("appointment", appointment);
+        return apiResponse.success(
+          res,
+          {
+            data: appointment,
+          },
+          201,
+          "Appointment updated successfully!"
+        );
+      } else {
+        const appointment = await PhysicalAppointment.findByIdAndDelete(id);
+        return apiResponse.success(
+          res,
+          {
+            data: appointment,
+          },
+          201,
+          "Appointment updated successfully!"
+        );
+      }
     } catch (error) {
       console.log("got here inside error");
       return apiResponse.error(res, { error });

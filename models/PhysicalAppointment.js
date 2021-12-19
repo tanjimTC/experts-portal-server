@@ -10,6 +10,7 @@ const physicalAppointmentSchema = new Schema({
   expertEmail: String,
   rate: String,
   date: String,
+  status: Boolean,
 });
 
 const PhysicalAppointment = mongoose.model(

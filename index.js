@@ -15,12 +15,12 @@ require("dotenv").config();
 //   useCreateIndex: true,
 // });
 
-mongoose.connect("mongodb://localhost/experts-portal", {
+mongoose.connect("mongodb://127.0.0.1/experts-portal", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
 
-// check connecttion
+// check connecttions
 mongoose.connection.on("connected", () => {
   console.log("connected");
 });

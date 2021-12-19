@@ -71,7 +71,7 @@ let userController = {
         email: "required|email",
         password: "required|min:6",
       };
-      console.log("req.body", req.query);
+      console.log("req.body", req.body);
 
       let validation = new Validator(req.body, rules);
       if (validation.fails()) {
@@ -86,6 +86,8 @@ let userController = {
       let { name, email, password } = req.body;
 
       password = await bcrypt.hash(password, 10);
+
+      console.log("password", password);
       const newUser = new User({
         name,
         email,
@@ -93,6 +95,8 @@ let userController = {
       });
 
       let user = await newUser.save();
+
+      console.log("user", user);
 
       // jwt signing
       let token = jwt.sign(
@@ -102,6 +106,8 @@ let userController = {
         process.env.JWT_SECRET,
         { expiresIn: 60 * 60 * 24 }
       );
+
+      console.log("token", token);
 
       return apiResponse.success(
         res,
@@ -116,7 +122,7 @@ let userController = {
         "User registered successfully!"
       );
     } catch (error) {
-      console.log("got here inside error");
+      console.log("got here inside error" , error);
       return apiResponse.error(res, { error });
     }
   },

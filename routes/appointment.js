@@ -3,6 +3,7 @@ const appointmentController = require("../controllers/v1/appointmentController")
 
 appointment.route("/add").post(appointmentController.addAppointment);
 appointment.route("/req").post(appointmentController.reqAppointment);
+appointment.route("/update").post(appointmentController.updateAppointment);
 
 appointment
   .route("/booked-appointments/:expertEmail")
