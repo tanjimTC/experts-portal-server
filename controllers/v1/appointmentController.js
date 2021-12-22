@@ -47,6 +47,24 @@ let appointmentController = {
         res,
         { data: Appointments },
         200,
+        "Requested Appointments by Email found"
+      );
+    } catch (error) {
+      res.json(error);
+    }
+  },
+
+
+  getRequstedAppointmentsByClientemail: async (req, res) => {
+    try {
+      const { userEmail } = req.params;
+      console.log("userEmail", userEmail);
+      const Appointments = await PhysicalAppointment.find({ userEmail });
+      console.log("Appointments", Appointments);
+      return apiResponse.success(
+        res,
+        { data: Appointments },
+        200,
         "Appointments by Email found"
       );
     } catch (error) {
@@ -79,6 +97,38 @@ let appointmentController = {
         { data: Appointments },
         200,
         "Appointments by date found"
+      );
+    } catch (error) {
+      res.json(error);
+    }
+  },
+
+  getPhysicalAppointmentsByDate: async (req, res) => {
+    try {
+      const { date, email } = req.body;
+      console.log("date", date);
+      const Appointments = await PhysicalAppointment.find({ date, expertEmail: email });
+      return apiResponse.success(
+        res,
+        { data: Appointments },
+        200,
+        "Physical Appointments by date found"
+      );
+    } catch (error) {
+      res.json(error);
+    }
+  },
+
+  getPhysicalAppointmentsByClientDate: async (req, res) => {
+    try {
+      const { date, email } = req.body;
+      console.log("date", date);
+      const Appointments = await PhysicalAppointment.find({ date, userEmail: email });
+      return apiResponse.success(
+        res,
+        { data: Appointments },
+        200,
+        "Physical Appointments by date found"
       );
     } catch (error) {
       res.json(error);

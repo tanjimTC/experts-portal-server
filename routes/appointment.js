@@ -14,6 +14,10 @@ appointment
   .get(appointmentController.getRequstedAppointmentsByemail);
 
 appointment
+  .route("/requested-appointments/client/:userEmail")
+  .get(appointmentController.getRequstedAppointmentsByClientemail);
+
+appointment
   .route("/booked-appointments/client/:userEmail")
   .get(appointmentController.getAppointmentsByClientEmail);
 
@@ -23,5 +27,13 @@ appointment
 appointment
   .route("/booked-appointments/client/date")
   .post(appointmentController.getAppointmentsByDateClient);
+
+appointment
+  .route("/booked-appointments/physical/date")
+  .post(appointmentController.getPhysicalAppointmentsByDate);
+
+appointment
+  .route("/booked-appointments/physical/client/date")
+  .post(appointmentController.getPhysicalAppointmentsByClientDate);
 
 module.exports = appointment;
