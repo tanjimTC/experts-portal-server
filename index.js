@@ -6,19 +6,19 @@ const helmet = require("helmet");
 require("./utils/apiResponse");
 require("dotenv").config();
 
-// const uri = process.env.DB_PATH;
+const uri = process.env.DB_PATH;
 
-// // mongoDB connect
-// mongoose.connect(uri, {
-//   useNewUrlParser: true,
-//   useUnifiedTopology: true,
-//   useCreateIndex: true,
-// });
-
-mongoose.connect("mongodb://127.0.0.1/experts-portal", {
+// mongoDB connect
+mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
+  useCreateIndex: true,
 });
+
+// mongoose.connect("mongodb://127.0.0.1/experts-portal", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true,
+// });
 
 // check connecttions
 mongoose.connection.on("connected", () => {
