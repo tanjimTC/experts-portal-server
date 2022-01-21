@@ -9,7 +9,7 @@
 	},
 	"scripts": {
 		"start": "node index.js",
-		"server": "nodemon index.js"
+		"server:dev": "nodemon index.js"
 	},
 	"author": "Luke",
 	"license": "ISC",
@@ -30,6 +30,6 @@
 		"validatorjs": "^3.22.1"
 	},
 	"devDependencies": {
-		"nodemon": "^2.0.12"
+		"nodemon": "^2.0.15"
 	}
 }
